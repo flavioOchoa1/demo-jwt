@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .disable())
             .authorizeHttpRequests(authRequest ->
               authRequest
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/**", "/html/**", "/css/**", "/js/**", "/img/**").permitAll()
                 .anyRequest().authenticated()
                 )
             .sessionManagement(sessionManager->
