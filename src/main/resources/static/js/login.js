@@ -1,24 +1,30 @@
 document.getElementById('loginForm').addEventListener('submit', async function(e) {
-  e.preventDefault(); // Evita que la página se recargue al enviar el formulario
+  e.preventDefault(); // Evita recargar la página
 
-  // Obtiene los valores ingresados por el usuario
+  // Obtiene los valores del formulario
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
 
-  // Realiza una petición POST al endpoint /auth/login con los datos del usuario
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = ""; // Limpia mensajes previos
+
+  // Envía la petición POST al backend
   const response = await fetch('/auth/login', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({username, password})
   });
 
-  // Procesa la respuesta del backend
-  const data = await response.json();
   if(response.ok) {
-    // Si el login es exitoso, muestra el token JWT recibido
-    document.getElementById('result').innerText = 'Token: ' + data.token;
+    // Si el login es exitoso, muestra el token
+    const data = await response.json();
+    resultDiv.innerHTML = `<div class="alert alert-success fade show" role="alert">
+      <strong>¡Login exitoso!</strong> Token: ${data.token}
+    </div>`;
   } else {
-    // Si falla, muestra un mensaje de error
-    document.getElementById('result').innerText = 'Error de inicio de sesión';
+    // Si falla, muestra mensaje de error en rojo
+    resultDiv.innerHTML = `<div class="alert alert-danger fade show" role="alert">
+      <strong>Error:</strong> Usuario o contraseña incorrecta
+    </div>`;
   }
 });
